@@ -1,5 +1,5 @@
 context:
-  version: "0.17.1"
+  version: "0.18.0"
 
 package:
   name: msgvault
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: https://github.com/wesm/msgvault/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: ffadb982007edb77c48942d5c14798f20840862bf39f905e256db176ff3d221b
+    sha256: 6c3539d69de1b1856df84fd6bee782418cf4dd9c0e0140765bc0d30231360740
     target_directory: src
 
 build:
