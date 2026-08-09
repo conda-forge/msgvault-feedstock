@@ -17,6 +17,12 @@ build:
     - cd src/cmd/msgvault
     - go-licenses save . --save_path ../../../library_licenses${{ ' --ignore github.com/mattn/go-localereader' if win else '' }}
     - go build -v -tags "fts5,duckdb_use_lib,libsqlite3" -o $PREFIX/bin/msgvault -ldflags="-s -w -X github.com/wesm/msgvault/cmd/msgvault/cmd.Version=v${PKG_VERSION}"
+    - if: unix
+      then:
+        - mkdir -p $PREFIX/share/bash-completion/completions $PREFIX/share/zsh/site-functions $PREFIX/share/fish/vendor_completions.d
+        - $PREFIX/bin/msgvault completion bash > $PREFIX/share/bash-completion/completions/msgvault
+        - $PREFIX/bin/msgvault completion zsh > $PREFIX/share/zsh/site-functions/_msgvault
+        - $PREFIX/bin/msgvault completion fish > $PREFIX/share/fish/vendor_completions.d/msgvault.fish
 
 requirements:
   build:
@@ -36,6 +42,12 @@ tests:
   - package_contents:
       bin:
         - msgvault
+      files:
+        - if: unix
+          then:
+            - share/bash-completion/completions/msgvault
+            - share/fish/vendor_completions.d/msgvault.fish
+            - share/zsh/site-functions/_msgvault
       strict: true
 
 about:
