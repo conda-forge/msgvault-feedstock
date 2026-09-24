@@ -1,5 +1,5 @@
 context:
-  version: "0.19.3"
+  version: "0.20.0"
 
 package:
   name: msgvault
@@ -7,12 +7,12 @@ package:
 
 source:
   - url: https://github.com/wesm/msgvault/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: 2aa8dc6c3228acb8d94920714fe32617dfd85dc6d02d3aa9c0d511df9e330401
+    sha256: c23fc6fb9ec986aaf5a2ce7d18691f09c6ca18cefe80e38a8e6d5790e3f73ff1
     target_directory: src
 
 build:
   skip: win
-  number: 1
+  number: 0
   script:
     - cd src
     - make web-install web-embed
