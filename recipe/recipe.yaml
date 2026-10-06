@@ -23,7 +23,7 @@ build:
     - pnpm-licenses generate-disclaimer --json-input-file frontend-license-input.json --output-file frontend_licenses.txt
     - cd cmd/msgvault
     # github.com/segmentio/asm is MIT-0 which go-licenses does not recognize
-    - go-licenses save . --save_path ../../../library_licenses --ignore github.com/segmentio/asm${{ ' --ignore github.com/mattn/go-localereader' if win else '' }}
+    - go-licenses save . --save_path ../../../library_licenses --ignore github.com/segmentio/asm
     - mkdir -p ../../../library_licenses/github.com/segmentio/asm
     - cp $(go list -m -f "{{.Dir}}" github.com/segmentio/asm)/LICENSE ../../../library_licenses/github.com/segmentio/asm/LICENSE
     - go build -v -tags "fts5,duckdb_use_lib,libsqlite3" -o $PREFIX/bin/msgvault -ldflags="-s -w -X github.com/wesm/msgvault/cmd/msgvault/cmd.Version=v${PKG_VERSION}"
