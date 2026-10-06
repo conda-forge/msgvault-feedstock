@@ -1,5 +1,5 @@
 context:
-  version: "0.19.3"
+  version: "0.21.0"
 
 package:
   name: msgvault
@@ -7,19 +7,25 @@ package:
 
 source:
   - url: https://github.com/wesm/msgvault/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: 2aa8dc6c3228acb8d94920714fe32617dfd85dc6d02d3aa9c0d511df9e330401
+    sha256: 25285e2281238e64f5c72c1a1cc54e8a3f0351b76ea6dfb7c6971f4566276e4f
     target_directory: src
 
 build:
   skip: win
-  number: 1
+  number: 0
   script:
     - cd src
+    # conda-forge's bun reports os.arch() as x64 on linux-aarch64, so esbuild picks the wrong binary
+    - if: linux and aarch64
+      then: export ESBUILD_BINARY_PATH=$SRC_DIR/src/web/node_modules/@esbuild/linux-arm64/bin/esbuild
     - make web-install web-embed
     - node $RECIPE_DIR/collect-node-licenses.mjs web/node_modules frontend-license-input.json
     - pnpm-licenses generate-disclaimer --json-input-file frontend-license-input.json --output-file frontend_licenses.txt
     - cd cmd/msgvault
-    - go-licenses save . --save_path ../../../library_licenses${{ ' --ignore github.com/mattn/go-localereader' if win else '' }}
+    # github.com/segmentio/asm is MIT-0 which go-licenses does not recognize
+    - go-licenses save . --save_path ../../../library_licenses --ignore github.com/segmentio/asm
+    - mkdir -p ../../../library_licenses/github.com/segmentio/asm
+    - cp $(go list -m -f "{{.Dir}}" github.com/segmentio/asm)/LICENSE ../../../library_licenses/github.com/segmentio/asm/LICENSE
     - go build -v -tags "fts5,duckdb_use_lib,libsqlite3" -o $PREFIX/bin/msgvault -ldflags="-s -w -X github.com/wesm/msgvault/cmd/msgvault/cmd.Version=v${PKG_VERSION}"
     - node ../../scripts/check-web-assets.mjs --binary $PREFIX/bin/msgvault
     - if: unix
