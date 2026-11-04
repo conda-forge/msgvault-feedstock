@@ -19,7 +19,7 @@ cxx_compiler_version:
 docker_image:
 - quay.io/condaforge/linux-anvil-aarch64:alma10
 libduckdb_devel:
-- '1'
+- '2'
 libsqlite:
 - '3'
 target_platform:
