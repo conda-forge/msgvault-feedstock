@@ -2,3 +2,7 @@
 # which is only declared in the macOS 13.0+ SDK.
 c_stdlib_version:  # [osx]
   - 13.0  # [osx]
+# msgvault >=0.23.0 uses duckdb-go-bindings v0.20000.0, which needs the DuckDB 2.0 C API
+# (e.g. duckdb_create_timestamp_tz_ns). Remove once the global pinning moves to 2.
+libduckdb_devel:
+  - '2'
